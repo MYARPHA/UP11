@@ -1,0 +1,64 @@
+8.1 Какова структура инструкции SELECT?
+Инструкция SELECT используется для извлечения данных из базы данных. Общая структура:
+SELECT столбцы  
+FROM таблица  
+[WHERE условия]  
+[GROUP BY столбцы]  
+[HAVING условия]  
+[ORDER BY столбцы [ASC | DESC]]  
+[LIMIT количество];
+
+8.2 Что указывается после ключевого слова SELECT?
+После SELECT указываются столбцы, которые нужно выбрать. Можно выбрать:
+- Определённые столбцы: SELECT name, price FROM book;
+- Все столбцы (*): SELECT * FROM book;
+- Вычисляемые значения: SELECT price * 1.2 AS new_price FROM book;
+
+8.3 Что указывается после ключевого слова FROM?
+После FROM указывается имя таблицы, из которой извлекаются данные.
+Пример: SELECT title, price FROM book;
+Можно использовать несколько таблиц с JOIN:
+SELECT book.title, authors.name FROM book 
+JOIN authors ON book.author_id = authors.id;
+
+8.4 Что указывается после ключевого слова WHERE?
+После WHERE указывается условие отбора строк.
+Пример: SELECT title, price FROM book WHERE price > 500;
+Можно использовать операторы AND, OR, LIKE, BETWEEN:
+SELECT * FROM customers WHERE country = 'Россия' AND phone IS NOT NULL;
+
+8.5 В чем отличие между разделами WHERE и HAVING?
+- WHERE фильтрует строки до группировки (GROUP BY).
+- HAVING фильтрует результаты после группировки.
+Пример:
+-- Фильтрация перед группировкой
+SELECT * FROM book WHERE price > 500;
+-- Фильтрация после группировки
+SELECT author_id, COUNT(*) AS book_count FROM book 
+GROUP BY author_id HAVING COUNT(*) > 3;
+
+8.6 Что указывается после ключевого слова GROUP BY?
+После GROUP BY указываются столбцы, по которым выполняется группировка.
+Пример:
+SELECT genre, COUNT(*) AS book_count FROM book GROUP BY genre;
+
+8.7 Применение каких функций SQL требует группировки столбцов?
+Группировка нужна для агрегатных функций:
+- COUNT() — количество строк
+- SUM() — сумма значений
+- AVG() — среднее
+- MIN() — минимальное значение
+- MAX() — максимальное значение
+Пример:
+SELECT author_id, COUNT(*) AS books_written FROM book GROUP BY author_id;
+
+8.8 Что указывается после ключевого слова ORDER BY?
+После ORDER BY указываются столбцы, по которым сортируются результаты.
+- По возрастанию (ASC, по умолчанию): SELECT title, price FROM book ORDER BY price ASC;
+- По убыванию (DESC): SELECT title, price FROM book ORDER BY price DESC;
+
+8.9 Как создать вычисляемое поле в запросе?
+Вычисляемое поле создаётся с помощью операций (+, -, *, /) и AS для задания имени.
+Пример:
+SELECT title, price, price * 0.9 AS discount_price FROM book;
+Это создаст столбец discount_price с ценой книги со скидкой 10%.
